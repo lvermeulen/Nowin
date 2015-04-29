@@ -1,0 +1,25 @@
+﻿{
+    "version": "1.0.0-*",
+    "description": "",
+    "authors": [ "" ],
+    "tags": [ "" ],
+    "projectUrl": "",
+    "licenseUrl": "",
+
+    "dependencies": {
+        "Nowin": "1.0.0-*",
+        "xunit.abstractions": "2.0.0",
+        "xunit.assert": "2.0.0",
+        "xunit.core": "2.0.0"
+    },
+
+    "frameworks": {
+        "net451": {
+            "dependencies": {
+            }
+        },
+        "dnx50": {
+
+        }
+    }
+}
