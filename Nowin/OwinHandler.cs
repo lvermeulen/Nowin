@@ -47,6 +47,7 @@ namespace Nowin
             CancellationToken /* cancel */,
             Task
         >;
+    using System;
 
     public class OwinHandler : IHttpLayerHandler
     {
@@ -277,9 +278,9 @@ namespace Nowin
                     return;
                 }
                 var v = connectionValues[0];
-                if (v.Equals("Close", StringComparison.InvariantCultureIgnoreCase))
+                if (v.Equals("Close", StringComparison.OrdinalIgnoreCase))
                     Callback.KeepAlive = false;
-                else if (v.Equals("Keep-alive", StringComparison.InvariantCultureIgnoreCase))
+                else if (v.Equals("Keep-alive", StringComparison.OrdinalIgnoreCase))
                     Callback.KeepAlive = true;
             }
             string[] contentLengthValues;

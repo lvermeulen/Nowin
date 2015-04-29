@@ -5,6 +5,7 @@ using System.IO;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -1158,7 +1159,7 @@ namespace Nowin
             _isKeepAlive = false;
             _responseHeaderPos = 0;
             HeaderAppend("HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Accept: ");
-            var sha1 = new SHA1Managed();
+            var sha1 = SHA1.Create();
             var hash = sha1.ComputeHash(Encoding.ASCII.GetBytes(_webSocketKey + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11"));
             HeaderAppend(Convert.ToBase64String(hash));
             HeaderAppendCrLf();

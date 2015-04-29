@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Security;
+using System.Net.Security;
 using System.Runtime.ExceptionServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
@@ -76,34 +77,12 @@ namespace Nowin
                 return ReadOverflowAsync(buffer, offset, count, null, null);
             }
 
-            public override IAsyncResult BeginRead(byte[] buffer, int offset, int count, AsyncCallback callback, object state)
-            {
-                return ReadOverflowAsync(buffer, offset, count, callback, state);
-            }
-
             Task<int> ReadOverflowAsync(byte[] buffer, int offset, int count, AsyncCallback callback, object state)
             {
                 _tcsReceive = new TaskCompletionSource<int>(state);
                 _callbackReceive = callback;
                 _owner.Callback.StartReceive(buffer, offset, count);
                 return _tcsReceive.Task;
-            }
-
-            public override int EndRead(IAsyncResult asyncResult)
-            {
-                if (((Task<int>)asyncResult).IsCanceled)
-                {
-                    return 0;
-                }
-                try
-                {
-                    return ((Task<int>)asyncResult).Result;
-                }
-                catch (AggregateException ex)
-                {
-                    ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-                    throw;
-                }
             }
 
             public void FinishSend(Exception exception)
@@ -136,27 +115,6 @@ namespace Nowin
                 _tcsSend = new TaskCompletionSource<object>();
                 _owner.Callback.StartSend(buffer, offset, count);
                 return _tcsSend.Task;
-            }
-
-            public override IAsyncResult BeginWrite(byte[] buffer, int offset, int count, AsyncCallback callback, object state)
-            {
-                _tcsSend = new TaskCompletionSource<object>(state);
-                _callbackSend = callback;
-                _owner.Callback.StartSend(buffer, offset, count);
-                return _tcsSend.Task;
-            }
-
-            public override void EndWrite(IAsyncResult asyncResult)
-            {
-                try
-                {
-                    ((Task<object>)asyncResult).Wait();
-                }
-                catch (AggregateException ex)
-                {
-                    ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-                    throw;
-                }
             }
 
             public override bool CanRead
