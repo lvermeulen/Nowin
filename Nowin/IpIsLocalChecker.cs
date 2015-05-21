@@ -11,7 +11,7 @@ namespace Nowin
 
         public IpIsLocalChecker()
         {
-            var host = Dns.GetHostEntry(Dns.GetHostName());
+            var host = Dns.GetHostEntryAsync(Dns.GetHostName()).Result; //TODO DNX make this class async
             _dict = host.AddressList.Where(
                 a => a.AddressFamily == AddressFamily.InterNetwork || a.AddressFamily == AddressFamily.InterNetworkV6)
                 .Distinct()
