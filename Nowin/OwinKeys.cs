@@ -1,7 +1,5 @@
 namespace Nowin
 {
-    using System.Runtime.CompilerServices;
-
     public static class OwinKeys
     {
         public const string RequestBody = "owin.RequestBody";

@@ -47,7 +47,6 @@ namespace Nowin
             CancellationToken /* cancel */,
             Task
         >;
-    using System;
 
     public class OwinHandler : IHttpLayerHandler
     {
