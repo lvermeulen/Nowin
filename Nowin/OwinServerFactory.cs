@@ -88,7 +88,7 @@ namespace Nowin
                 {
                     var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
                     socket.Connect(ipEndPoint);
-                    socket.Close();
+                    socket.Dispose();
                 }
             }
             catch (Exception)

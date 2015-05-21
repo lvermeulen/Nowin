@@ -198,7 +198,6 @@ namespace Nowin
             if (!_runtimeCorrectlyImplementsDisconnectReuseSocket)
             {
                 _receiveEvent.AcceptSocket = null;
-                _socket.Close();
                 _socket.Dispose();
             }
             _socket = null;
