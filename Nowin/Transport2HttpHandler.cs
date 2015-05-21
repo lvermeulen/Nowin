@@ -800,7 +800,7 @@ namespace Nowin
                 return tcs.Task.ContinueWith(_ =>
                 {
                     tcs = new TaskCompletionSource<bool>();
-                    Thread.MemoryBarrier();
+                    Interlocked.MemoryBarrier();
                     if (_tcsSend != null)
                     {
                         throw new InvalidOperationException("Want to start send but previous is still sending");
@@ -810,7 +810,7 @@ namespace Nowin
                 });
             }
             tcs = new TaskCompletionSource<bool>();
-            Thread.MemoryBarrier();
+            Interlocked.MemoryBarrier();
             _tcsSend = tcs;
             Callback.StartSend(buffer, startOffset, len);
             return tcs.Task;
@@ -854,7 +854,7 @@ namespace Nowin
         public void Send100Continue()
         {
             var tcs = new TaskCompletionSource<bool>();
-            Thread.MemoryBarrier();
+            Interlocked.MemoryBarrier();
             _tcsSend = tcs;
             Callback.StartSend(_buffer, _constantsOffset, Server.Status100Continue.Length);
         }
