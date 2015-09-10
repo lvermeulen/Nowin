@@ -75,7 +75,7 @@ namespace Nowin
 
         public ServerBuilder SetOwinApp(Func<IDictionary<string, object>, Task> app)
         {
-            _app = app;
+            _app = LimitsMiddleware.Limits.ConnectionTimeout(TimeSpan.FromSeconds(5))(app);
             return this;
         }
 
