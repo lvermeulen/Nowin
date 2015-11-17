@@ -15,7 +15,7 @@ namespace NowinTests
 
         public NowinTestsSecure()
         {
-            _certificate = new X509Certificate2("../../../sslcert/test.pfx", "nowin");
+            _certificate = new X509Certificate2("test.pfx", "nowin");
             ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
         }
 
