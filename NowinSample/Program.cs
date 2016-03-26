@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
@@ -11,6 +12,11 @@ namespace NowinSample
     {
         static void Main(string[] args)
         {
+            X509Store store = new X509Store(StoreLocation.CurrentUser);
+            store.Open(OpenFlags.ReadOnly);
+            var cert = store.Certificates.Find(X509FindType.FindBySubjectName, "www.example.com", false)[0];
+            store.Close();
+
             var owinbuilder = new AppBuilder();
             OwinServerFactory.Initialize(owinbuilder.Properties);
             new SampleOwinApp.Startup().Configuration(owinbuilder);
@@ -19,10 +25,12 @@ namespace NowinSample
                 .SetOwinApp(owinbuilder.Build())
                 .SetOwinCapabilities((IDictionary<string, object>)owinbuilder.Properties[OwinKeys.ServerCapabilitiesKey])
                 .SetExecutionContextFlow(ExecutionContextFlow.SuppressAlways);
-            //builder
-            //    .SetCertificate(new X509Certificate2("../../../sslcert/test.pfx", "nowin"))
+            builder
+                .SetCertificate(cert);
             //    .RequireClientCertificate();
-            var builder2 = ServerBuilder.New().SetPort(9999).SetOwinApp(owinbuilder.Build()).SetOwinCapabilities((IDictionary<string, object>)owinbuilder.Properties[OwinKeys.ServerCapabilitiesKey]);
+            var builder2 = ServerBuilder.New().SetPort(9999)
+                .SetOwinApp(owinbuilder.Build())
+                .SetOwinCapabilities((IDictionary<string, object>)owinbuilder.Properties[OwinKeys.ServerCapabilitiesKey]);
             using (var server = builder.Build())
             using (var server2 = builder2.Build())
             {
